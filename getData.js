@@ -31,7 +31,7 @@ const token = await getToken();
 export const getData = async (url) => {
   // 토큰이 없을 경우 token 요청
   if (!token) {
-    token = await getToken({ client_id, client_secret });
+    token = await getToken();
   }
   try {
     const response = await fetch(url, {
