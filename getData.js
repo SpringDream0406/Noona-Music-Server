@@ -3,9 +3,9 @@ import fetch from "node-fetch";
 
 const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
-let token;
 
-async function getToken() {
+// 토큰 요청
+export async function getToken() {
   try {
     const response = await fetch("https://accounts.spotify.com/api/token", {
       method: "POST",
@@ -20,20 +20,21 @@ async function getToken() {
       },
     });
 
-    token = await response.json();
+    let token = await response.json();
+    token.expireTime = Date.now() + token.expires_in * 1000;
+    return token;
   } catch (error) {
     console.log(error);
   }
 }
 
-// const token = await getToken();
+export const isTokenExpired = (token) => {
+  return !token || token?.expireTime < Date.now();
+};
 
 // 데이터 요청
-export const getData = async (url) => {
+export const getData = async (url, token) => {
   // 토큰이 없을 경우 token 요청
-  if (!token) {
-    await getToken();
-  }
   try {
     const response = await fetch(url, {
       headers: {
@@ -43,12 +44,6 @@ export const getData = async (url) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    // 토큰이 만료되어 401 에러가 날 경우 토큰 다시 요청 하고 getData 다시 수행
-    if (error.status === 401) {
-      await getToken();
-      return await getData(url);
-    } else {
-      console.error("Error:", error);
-    }
+    console.error("Error:", error);
   }
 };
