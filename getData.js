@@ -44,8 +44,8 @@ export const getData = async (url) => {
   } catch (error) {
     // 토큰이 만료되어 401 에러가 날 경우 토큰 다시 요청 하고 getData 다시 수행
     if (error.status === 401) {
-      await getToken({ client_id, client_secret });
-      return getData(url);
+      await getToken();
+      return await getData(url);
     } else {
       console.error("Error:", error);
     }
