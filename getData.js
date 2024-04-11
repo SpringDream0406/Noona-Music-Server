@@ -26,11 +26,13 @@ async function getToken() {
   }
 }
 
+// const token = await getToken();
+
 // 데이터 요청
 export const getData = async (url) => {
   // 토큰이 없을 경우 token 요청
   if (!token) {
-    token = await getToken();
+    await getToken();
   }
   try {
     const response = await fetch(url, {
