@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 
 const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
+let token;
 
 async function getToken() {
   try {
@@ -19,13 +20,11 @@ async function getToken() {
       },
     });
 
-    return await response.json();
+    token = await response.json();
   } catch (error) {
     console.log(error);
   }
 }
-
-const token = await getToken();
 
 // 데이터 요청
 export const getData = async (url) => {
