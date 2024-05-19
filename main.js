@@ -3,7 +3,7 @@ import cors from "cors";
 import { getData, getToken, isTokenExpired } from "./getData.js";
 
 const app = express();
-const port = 3001;
+const port = 80;
 
 let token;
 
